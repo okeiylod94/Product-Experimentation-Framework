@@ -5,6 +5,7 @@
 ---
 
 ## Table of Contents
+
 - [Overview](#overview)
 - [Problem Statement](#problem-statement)
 - [How It Works](#how-it-works)
@@ -23,6 +24,7 @@
 Before this framework, product decisions at E&M Tech House were made on intuition and anecdote. A new UI flow might ship because someone on the team "felt" it would work better. This framework replaced that with a structured, statistically sound process for validating hypotheses before full rollout.
 
 It handles the full experiment lifecycle:
+
 - Define a hypothesis and success metric
 - Split users into control/treatment groups (deterministically, so the same user always sees the same variant)
 - Collect event data during the experiment window
@@ -34,6 +36,7 @@ It handles the full experiment lifecycle:
 ## Problem Statement
 
 Product and engineering teams needed answers to questions like:
+
 - "Does the new payment confirmation screen reduce drop-offs?"
 - "Does showing transaction history increase mobile money usage?"
 - "Which onboarding flow leads to more account activations?"
@@ -66,13 +69,13 @@ For binary outcomes (converted / didn't convert), we use a two-proportion z-test
 
 ## Tech Stack
 
-| Component | Technology |
-|-----------|-----------|
-| Core logic | Python |
-| Statistical tests | SciPy |
-| Data storage | PostgreSQL |
+| Component            | Technology         |
+| -------------------- | ------------------ |
+| Core logic           | Python             |
+| Statistical tests    | SciPy              |
+| Data storage         | PostgreSQL         |
 | Analysis & reporting | Pandas, Matplotlib |
-| Notebook walkthrough | Jupyter |
+| Notebook walkthrough | Jupyter            |
 
 ---
 
@@ -103,7 +106,9 @@ experimentation-framework/
 ## Core Concepts
 
 ### Hypothesis format
+
 Every experiment starts with a structured hypothesis:
+
 ```
 IF we [change],
 THEN [metric] will [increase/decrease] by [amount],
@@ -111,14 +116,17 @@ BECAUSE [reasoning].
 ```
 
 Example:
+
 > IF we show the transaction summary before the confirmation button,  
 > THEN payment completion rate will increase by ≥ 5%,  
 > BECAUSE users are more confident when they can review details.
 
 ### Minimum Detectable Effect (MDE)
+
 Before running an experiment, we calculate the minimum sample size needed to detect a meaningful difference. Running under-powered experiments is one of the most common mistakes in A/B testing — you get a "not significant" result and can't tell if the change genuinely didn't work, or if you just didn't have enough data.
 
 ### Statistical significance vs. practical significance
+
 A result can be statistically significant (p < 0.05) but practically meaningless (e.g. +0.1% conversion). The framework reports both the p-value and the absolute effect size so teams make decisions on business impact, not just math.
 
 ---
@@ -126,16 +134,19 @@ A result can be statistically significant (p < 0.05) but practically meaningless
 ## Example Experiments
 
 ### Experiment 1: Payment confirmation screen
+
 - **Hypothesis:** Showing a transaction summary before confirm button increases completion
 - **Metric:** Payment completion rate
 - **Result:** +7.3% lift, p=0.003 → Shipped to 100% of users
 
 ### Experiment 2: Onboarding CTA button colour
+
 - **Hypothesis:** Green CTA button increases account activations vs. grey
 - **Metric:** Account activation rate (7-day)
 - **Result:** +1.1% lift, p=0.21 → Not significant, did not ship
 
 ### Experiment 3: Transaction history visibility
+
 - **Hypothesis:** Showing last 5 transactions on home screen increases repeat usage
 - **Metric:** DAU/MAU ratio (stickiness)
 - **Result:** +4.8% lift, p=0.018 → Shipped
@@ -144,12 +155,12 @@ A result can be statistically significant (p < 0.05) but practically meaningless
 
 ## Key Results
 
-| Metric | Value |
-|--------|-------|
-| Experiments run | 12+ |
-| Decisions informed | All major product releases (Q1–Q2 2026) |
-| Average experiment duration | 14 days |
-| Adoption | Used by product, engineering, and data teams |
+| Metric                      | Value                                        |
+| --------------------------- | -------------------------------------------- |
+| Experiments run             | 12+                                          |
+| Decisions informed          | All major product releases (Q1–Q2 2026)      |
+| Average experiment duration | 14 days                                      |
+| Adoption                    | Used by product, engineering, and data teams |
 
 ---
 
@@ -157,7 +168,7 @@ A result can be statistically significant (p < 0.05) but practically meaningless
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/your-username/experimentation-framework.git
+git clone https://github.com/okeiylod94/Product-Experimentation-Framework.git
 cd experimentation-framework
 
 # 2. Install dependencies
@@ -174,4 +185,4 @@ jupyter notebook notebooks/experimentation_framework.ipynb
 - **Deterministic assignment matters** — random assignment per session causes users to flip between variants, corrupting your data
 - **Run power calculations before, not after** — deciding sample size after seeing results is p-hacking
 - **Novelty effect is real** — new UI changes often get a short-term lift just because they're new; running experiments for at least 1–2 weeks filters this out
-- **Shipping ≠ success** — the most valuable output of some experiments was the decision *not* to ship a feature, saving engineering time
+- **Shipping ≠ success** — the most valuable output of some experiments was the decision _not_ to ship a feature, saving engineering time
